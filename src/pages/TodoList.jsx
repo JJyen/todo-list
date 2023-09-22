@@ -8,7 +8,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 export const TodoList = () => {
     const [todos,setTodos]=useState([]);
     const [todo,setTodo]=useState("");
-    const nextId=useRef(0);
+    const nextId = useRef(0);
 
     const onInsert = (text) => {
 
@@ -44,6 +44,12 @@ export const TodoList = () => {
         try {
             const res = await axios.get('https://todo3-2ab08-default-rtdb.firebaseio.com/todos.json');
             const todosData = res.data;
+
+            if (todosData) {
+                const idArray = Object.keys(todosData).map((key) => parseInt(key));
+                const maxId = Math.max(...idArray);
+                nextId.current = maxId+1;
+            }
             
             if (todosData) {
                 const todosArray = Object.keys(todosData).map((key) => ({
